@@ -1,16 +1,15 @@
-FROM ghcr.iomhsanaei3x-uilatest
+FROM caddy:2-alpine AS caddy_bin
 
-# نصب Caddy و ابزارهای مورد نیاز
-RUN apt-get update && 
-    apt-get install -y caddy gettext-base curl && 
-    rm -rf varlibaptlists
+FROM ghcr.io/mhsanaei/3x-ui:latest
 
-WORKDIR app
+# کپی کردن مستقیم فایل اجراکننده Caddy
+COPY --from=caddy_bin /usr/bin/caddy /usr/bin/caddy
 
-# کپی کردن فایل‌های تنظیمات
-COPY Caddyfile.template etccaddyCaddyfile.template
-COPY entrypoint.sh entrypoint.sh
+WORKDIR /app
 
-RUN chmod +x entrypoint.sh
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [entrypoint.sh]
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
