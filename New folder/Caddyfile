@@ -1,5 +1,4 @@
-:${PORT} {
-    # مسیریابی ترافیک VLESS WebSocket
+:{$PORT} {
     handle /ray-ws* {
         reverse_proxy 127.0.0.1:2053 {
             header_up Host {host}
@@ -10,7 +9,6 @@
         }
     }
 
-    # مسیریابی داشبورد پنل سنایی
     handle {
         reverse_proxy 127.0.0.1:2053 {
             header_up Host {host}
