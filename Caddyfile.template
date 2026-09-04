@@ -1,0 +1,21 @@
+:${PORT} {
+    # مسیریابی ترافیک VLESS WebSocket
+    handle /ray-ws* {
+        reverse_proxy 127.0.0.1:2053 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up Upgrade {http.upgrade}
+            header_up Connection "Upgrade"
+        }
+    }
+
+    # مسیریابی داشبورد پنل سنایی
+    handle {
+        reverse_proxy 127.0.0.1:2053 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+        }
+    }
+}
